@@ -1,0 +1,11 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignore any exported GPO backups that are too large
+*.bak
+
+# Ignore temp files
+*.tmp
+*.log
