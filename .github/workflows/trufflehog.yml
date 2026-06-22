@@ -13,12 +13,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # full history needed so TruffleHog can diff commits properly
+          fetch-depth: 0
 
-      - name: TruffleHog OSS Scan
+      - name: TruffleHog OSS Scan (push)
+        if: github.event_name == 'push'
         uses: trufflesecurity/trufflehog@main
         with:
           path: ./
-          base: ${{ github.event.repository.default_branch }}
-          head: HEAD
+          extra_args: --only-verified
+
+      - name: TruffleHog OSS Scan (pull_request)
+        if: github.event_name == 'pull_request'
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.pull_request.base.sha }}
+          head: ${{ github.event.pull_request.head.sha }}
           extra_args: --only-verified
